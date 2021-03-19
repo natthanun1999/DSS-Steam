@@ -1,14 +1,22 @@
 const axios = require('axios')
+const Promise = require('bluebird')
 
 const getAllGames = (req, res) => {
     try {
-        axios.get("http://api.steampowered.com/ISteamApps/GetAppList/v2/")
+        // http://api.steampowered.com/ISteamApps/GetAppList/v2/
+        axios.get("http://127.0.0.1:9000/appids")
             .then(async (response) => {
-                let appids = getOnlyAppID(response.data.applist.apps)
+                //let appids = getOnlyAppID(response.data.applist.apps)
+                let appids = response.data.slice(0, 100)
                 
                 let gamesDetails = await getGameDetail(appids)
 
-                gamesDetails = gamesDetails.filter((v) => v.success == true && v.data.type == "game" && v.data.release_date.coming_soon == false)
+                // Remove Key
+                gamesDetails = gamesDetails.map((v, index) => {
+                    return v[appids[index]]
+                })
+
+                //gamesDetails = gamesDetails.filter((v) => v.success == true && v.data.type == "game" && v.data.release_date.coming_soon == false)
 
                 res.status(200).json({ message: gamesDetails })
             })
@@ -25,17 +33,31 @@ const getOnlyAppID = (games) => {
 
     appids.sort((a, b) => b - a)
 
-    return appids.slice(0, 2)
+    return appids.slice(0, 1000)
 }
 
-const getGameDetail = (appids) => {
+const getGameDetail = async (appids) => {
+    return await Promise.map(appids, appid => {
+        let params = {
+            appids: appid
+        }
+
+        let detail = axios.get("http://store.steampowered.com/api/appdetails", { params })
+            .then((response) => {        
+                return response.data
+            })
+            .catch((error) => { return { message: error } })
+
+        return detail
+    }, { concurrency: 1 })
+    /*
     let gamesDetails = appids.map((appid) => {
         let params = {
             appids: appid
         }
 
         let detail = axios.get("http://store.steampowered.com/api/appdetails", { params })
-            .then((response) => {
+            .then((response) => {        
                 return response.data
             })
             .catch((error) => { return { message: error } })
@@ -50,6 +72,7 @@ const getGameDetail = (appids) => {
                 return v[appids[index]]
             })
         })
+    */
 }
 
 const getGameReview = (req, res) => {
