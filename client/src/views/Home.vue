@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld />
-    <Result v-if="wantResult" />
+    <Result v-if="wantResult" tags="tags" />
   </div>
 </template>
 
@@ -19,19 +19,21 @@ export default {
   },
 
   mounted() {
-    window.eventBus.$on('getResult', this.getResult)
+    window.eventBus.$on("getResult", this.getResult);
   },
 
   data() {
-    return ({
-      wantResult: false
-    })
+    return {
+      wantResult: false,
+      tags: [],
+    };
   },
-  
+
   methods: {
-    getResult() {
-      this.wantResult = true
-    }
-  }
+    getResult(filter_tag) {
+      this.tags = filter_tag;
+      this.wantResult = true;
+    },
+  },
 };
 </script>

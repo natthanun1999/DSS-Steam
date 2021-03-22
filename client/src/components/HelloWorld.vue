@@ -104,6 +104,7 @@ export default {
         { status: false, name: "Strategy" },
         { status: false, name: "Tabletop" },
       ],
+      category: "",
     };
   },
 
@@ -118,7 +119,9 @@ export default {
       }
     },
     findResult() {
-      window.eventBus.$emit("getResult");
+      let filter_tag = this.tags.filter((tag) => tag.status === true);
+      console.log(filter_tag);
+      window.eventBus.$emit("getResult", filter_tag);
     },
   },
 };
