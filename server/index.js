@@ -4,7 +4,8 @@ const cors          = require('cors')
 const bodyParser    = require('body-parser')
 const dotenv        = require('dotenv')
 
-const routes = require('./routes/steam.js')
+const steamRoutes = require('./routes/steam.js')
+const serverRoutes = require('./routes/server.js')
 
 dotenv.config()
 
@@ -15,7 +16,8 @@ app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 app.use(cors())
 
 app.get('/', (req, res) => res.status(200).json({ message: "Hello World!" }))
-app.use('/beta/steam', routes)
+app.use('/beta/steam', steamRoutes)
+app.use('/steam', serverRoutes)
 
 mongoose.connect(process.env.MONGO_CON, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("MongoDB Connected!"))

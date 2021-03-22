@@ -2,7 +2,6 @@ const axios = require('axios')
 const Promise = require('bluebird')
 
 const mongoose = require('mongoose')
-const game = require('../models/game.js')
 
 const helpers = require('../helpers/steam.js')
 const Game = require('../models/game.js')
@@ -22,39 +21,13 @@ const getAllGames = (req, res) => {
                     return v[appids[index]]
                 })
 
-                gamesDetails = await gamesDetails.filter((v) => v.success == true && v.data.type == "game" && v.data.release_date.coming_soon == false)
-                
-                /*
-                gamesDetails = gamesDetails.map((v) => {
-                    return {
-                        type: v.data.type,
-                        name: v.data.name,
-                        steam_appid: v.data.steam_appid,
-                        required_age: v.data.required_age,
-                        is_free: v.data.is_free,
-                        supported_languages: v.data.supported_languages,
-                        header_image: v.data.header_image,
-                        website: v.data.website,
-                        categories: v.data.categories,
-                        genres: v.data.genres,
-                        release_date: v.data.release_date
-                    }
-                })
-
-                res.status(201).json({ message: gamesDetails })
-                */
+                gamesDetails = gamesDetails.filter((v) => v.success == true && v.data.type == "game" && v.data.release_date.coming_soon == false)
                 
                 let gamesReviews = await getGamesReview(gamesDetails)
 
                 try {
                     gamesDetails.forEach(async (v, index) => {
-                        const newGame = new Game({
-                            appid: v.data.steam_appid,
-                            detail: v.data,
-                            review: gamesReviews[index].query_summary
-                        })
-
-                        await newGame.save()
+                        await addGame(v.data, gamesReviews[index])
                     })
 
                     res.status(201).json({ message: "Ok" })
@@ -110,6 +83,16 @@ const getGamesReview = async (games) => {
 
         return review
     }, { concurrency: 1 })
+}
+
+const addGame = async (detail, review) => {
+    const newGame = new Game({
+        appid: detail.steam_appid,
+        detail: detail,
+        review: review.query_summary
+    })
+
+    await newGame.save()
 }
 
 module.exports = {

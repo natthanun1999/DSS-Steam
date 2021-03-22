@@ -2,13 +2,10 @@
   <div class="container mt-1 " style="margin-bottom: 2em;">
     <h2 class="title is-1">Result</h2>
 
-    <div class="box" v-for="game in gameList" :key="game.name">
+    <div class="box" v-for="game in gameList" :key="game._id">
       <article class="media">
         <div class="media-left">
-          <img
-            src="https://bulma.io/images/placeholders/640x320.png"
-            alt="Image"
-          />
+          <img :src="game.detail.header_image">
         </div>
         <div class="media-content">
           <div class="content">
@@ -17,7 +14,7 @@
                 <label class="label">Game</label>
               </div>
               <div class="level-left">
-                <p>{{ game.name }}</p>
+                <p>{{ game.detail.name }}</p>
               </div>
             </div>
             <div class="block">
@@ -25,7 +22,9 @@
                 <label class="label">Catagories</label>
               </div>
               <div class="level-left">
-                <span class="tag is-info">Single Player</span>
+                <span class="tag is-info mr-2" v-for="category in game.detail.categories" :key="category.id">
+                  {{ category.description }}
+                </span>
               </div>
             </div>
             <div class="block">
@@ -33,8 +32,9 @@
                 <label class="label">Tag</label>
               </div>
               <div class="level-left">
-                <span class="tag is-info mr-2">Action</span>
-                <span class="tag is-info mr-2">Battle Royal</span>
+                <span class="tag is-info mr-2" v-for="tag in game.detail.genres" :key="tag.id">
+                  {{ tag.description }}
+                </span>
               </div>
             </div>
             <div class="block">
@@ -42,7 +42,8 @@
                 <label class="label">Price</label>
               </div>
               <div class="level-left">
-                <p>9999</p>
+                <p v-if="game.detail.is_free">Free</p>
+                <p v-else> {{ game.detail.price_overview.final_formatted }} </p>
               </div>
             </div>
           </div>
@@ -53,29 +54,26 @@
 </template>
 
 <script>
+import Steam from '../api/steam.js'
+
 export default {
   name: "Result",
+
+  mounted() {
+    this.getAllGames()
+  },
+
   data() {
     return {
-      gameList: [
-        {
-          name: "game1",
-        },
-        {
-          name: "game2",
-        },
-        {
-          name: "game3",
-        },
-        {
-          name: "game4",
-        },
-        {
-          name: "game5",
-        },
-      ],
+      gameList: [],
     };
   },
+
+  methods: {
+    async getAllGames() {
+      this.gameList = await Steam.getAllGames()
+    }
+  }
 };
 </script>
 
