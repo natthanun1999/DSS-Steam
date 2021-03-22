@@ -8,11 +8,13 @@ const Game = require('../models/game.js')
 
 const getAllGames = (req, res) => {
     try {
+        // http://127.0.0.1:9000/appids
         // http://api.steampowered.com/ISteamApps/GetAppList/v2/
         axios.get("http://127.0.0.1:9000/appids")
             .then(async (response) => {
                 //let appids = getOnlyAppID(response.data.applist.apps)
-                let appids = response.data.slice(600, 650)
+                
+                let appids = response.data.slice(250, 300)
                 
                 let gamesDetails = await getGamesDetail(appids)
 
@@ -39,6 +41,8 @@ const getAllGames = (req, res) => {
                 } catch (error) {
                     res.status(409).json({ message: error.message })
                 }
+                
+                //res.status(201).json({ message: appids })
             })
             .catch((error) => res.status(400).json({ message: error }))
     } catch (error) {
@@ -53,7 +57,7 @@ const getOnlyAppID = (games) => {
 
     appids.sort((a, b) => b - a)
 
-    return appids.slice(0, 1000)
+    return appids.slice(25000, 26000)
 }
 
 const getGamesDetail = async (appids) => {
