@@ -21,9 +21,14 @@ const getAllGames = (req, res) => {
                     return v[appids[index]]
                 })
 
-                gamesDetails = gamesDetails.filter((v) => v.success == true && v.data.type == "game" && v.data.release_date.coming_soon == false)
+                gamesDetails = gamesDetails.filter((v) => 
+                    v.success == true &&
+                    v.data.type == "game" &&
+                    v.data.release_date.coming_soon == false)
                 
                 let gamesReviews = await getGamesReview(gamesDetails)
+
+                gamesReviews = Object.values(gamesReviews)
 
                 try {
                     gamesDetails.forEach(async (v, index) => {
@@ -86,8 +91,11 @@ const getGamesReview = async (games) => {
 }
 
 const addGame = async (detail, review) => {
+    if (review.query_summary.review_score <= 0) return;
+
     const newGame = new Game({
         appid: detail.steam_appid,
+        review_score: review.query_summary.review_score,
         detail: detail,
         review: review.query_summary
     })

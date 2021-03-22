@@ -2,7 +2,7 @@ const Game = require('../models/game.js')
 
 const getAllGames = async (req, res) => {
     try {
-        const content = await Game.find().sort({appid: -1})
+        const content = await Game.find().sort({review_score: -1})
 
         res.status(200).json(content)
     } catch (error) {
