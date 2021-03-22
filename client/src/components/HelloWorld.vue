@@ -4,14 +4,18 @@
 
     <div class="tile is-ancestor">
       <div class="tile is-vertical">
-
         <div class="tile">
           <div class="tile is-parent is-vertical">
             <article class="tile is-child notification is-primary">
               <p class="title">Budget</p>
               <p class="subtitle">Show me you buck</p>
 
-              <input class="input ml-2" type="text" placeholder="Enter your budget" required>
+              <input
+                class="input ml-2"
+                type="text"
+                placeholder="Enter your budget"
+                required
+              />
             </article>
           </div>
 
@@ -20,13 +24,18 @@
               <p class="title">Age</p>
               <p class="subtitle">What's your age?</p>
 
-              <input class="input ml-2" type="text" placeholder="Enter your age" required>
+              <input
+                class="input ml-2"
+                type="text"
+                placeholder="Enter your age"
+                required
+              />
             </article>
           </div>
 
           <div class="tile is-parent">
             <article class="tile is-child notification is-warning">
-              <p class="title">Game Type</p>
+              <p class="title">Categories</p>
               <p class="subtitle">Bottom tile</p>
 
               <div class="select">
@@ -44,11 +53,16 @@
         <div class="tile">
           <div class="tile is-parent">
             <article class="tile is-child notification is-info">
-              <p class="title">Categories</p>
+              <p class="title">Tags</p>
               <p class="subtitle">Bruh bruh bruh....</p>
 
               <div style="display: flex">
-                <div class="block mr-2" v-for="tag in tags" :key="tag.name" @click="toggle(tag)">
+                <div
+                  class="block mr-2"
+                  v-for="tag in tags"
+                  :key="tag.name"
+                  @click="toggle(tag)"
+                >
                   <span class="tag is-success is-light" :id="tag.name">
                     {{ tag.name }}
                   </span>
@@ -60,7 +74,9 @@
           <div class="tile is-parent">
             <article class="tile is-child notification is-danger">
               <div class="content">
-                <button class="button is-success" @click="findResult">Find games!</button>
+                <button class="button is-success" @click="findResult">
+                  Find games!
+                </button>
               </div>
             </article>
           </div>
@@ -72,9 +88,9 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   data() {
-    return ({
+    return {
       tags: [
         { status: false, name: "Action" },
         { status: false, name: "Adventure" },
@@ -87,25 +103,25 @@ export default {
         { status: false, name: "Sports" },
         { status: false, name: "Strategy" },
         { status: false, name: "Tabletop" },
-      ]
-    })
+      ],
+    };
   },
 
   methods: {
     toggle(tag) {
-      tag.status = !tag.status
-      
+      tag.status = !tag.status;
+
       if (tag.status) {
-        document.getElementById(tag.name).className = "tag is-success"
+        document.getElementById(tag.name).className = "tag is-success";
       } else {
-        document.getElementById(tag.name).className = "tag is-success is-light"
+        document.getElementById(tag.name).className = "tag is-success is-light";
       }
     },
     findResult() {
-      window.eventBus.$emit('getResult')
-    }
-  }
-}
+      window.eventBus.$emit("getResult");
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

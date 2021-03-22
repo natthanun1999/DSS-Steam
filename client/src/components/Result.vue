@@ -84,23 +84,6 @@ export default {
   methods: {
     async getAllGames() {
       this.gameList = await Steam.getAllGames();
-      await this.filterGameByReview();
-      await this.sortGameByReviewScore();
-    },
-    filterGameByReview() {
-      console.log("filter");
-      this.gameList.forEach((game) => {
-        if (game.review.total_reviews <= 0) {
-          let index = this.gameList.indexOf(game);
-          this.gameList.splice(index, 1);
-        }
-      });
-    },
-    sortGameByReviewScore() {
-      console.log("sort");
-      this.gameList.review.review_score.sort((a, b) => {
-        return a - b;
-      });
     },
   },
 };
