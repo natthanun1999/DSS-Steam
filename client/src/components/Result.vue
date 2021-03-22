@@ -2,7 +2,7 @@
   <div class="container mt-1 " style="margin-bottom: 2em;">
     <h2 class="title is-1">Result</h2>
 
-    <div class="box" v-for="game in gameList" :key="game._id">
+    <div class="box" v-for="(game, index) in gameList" :key="game._id">
       <article class="media">
         <div class="media-left">
           <img :src="game.detail.header_image">
@@ -14,12 +14,12 @@
                 <label class="label">Game</label>
               </div>
               <div class="level-left">
-                <p>{{ game.detail.name }}</p>
+                <p>{{index + 1}}. {{ game.detail.name }}</p>
               </div>
             </div>
             <div class="block">
               <div class="level-left">
-                <label class="label">Catagories</label>
+                <label class="label">Categories</label>
               </div>
               <div class="level-left">
                 <span class="tag is-info mr-2" v-for="category in game.detail.categories" :key="category.id">
@@ -43,7 +43,7 @@
               </div>
               <div class="level-left">
                 <p v-if="game.detail.is_free">Free</p>
-                <p v-else> {{ game.detail.price_overview.final_formatted }} </p>
+                <p v-else-if="'price_overview' in game.detail"> {{ game.detail.price_overview.final_formatted }} </p>
               </div>
             </div>
           </div>
