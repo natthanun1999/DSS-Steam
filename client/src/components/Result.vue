@@ -2,65 +2,77 @@
   <div class="container mt-1 " style="margin-bottom: 2em;">
     <h2 class="title is-1">Result</h2>
 
-    <div class="box" v-for="(game, index) in gameList" :key="game._id">
-      <article class="media">
-        <div class="media-left">
-          <img :src="game.detail.header_image">
-        </div>
-        <div class="media-content">
-          <div class="content">
-            <div class="block">
-              <div class="level-left">
-                <label class="label">Game</label>
+    <div v-for="(game, index) in gameList" :key="game._id">
+      <div class="box mb-5" v-if="game.review.total_reviews > 0">
+        <article class="media">
+          <div class="media-left">
+            <img :src="game.detail.header_image" />
+          </div>
+          <div class="media-content">
+            <div class="content">
+              <div class="block">
+                <div class="level-left">
+                  <label class="label">Game</label>
+                </div>
+                <div class="level-left">
+                  <p>{{ index + 1 }}. {{ game.detail.name }}</p>
+                </div>
               </div>
-              <div class="level-left">
-                <p>{{index + 1}}. {{ game.detail.name }}</p>
+              <div class="block">
+                <div class="level-left">
+                  <label class="label">Categories</label>
+                </div>
+                <div class="level-left">
+                  <span
+                    class="tag is-info mr-2"
+                    v-for="category in game.detail.categories"
+                    :key="category.id"
+                  >
+                    {{ category.description }}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="block">
-              <div class="level-left">
-                <label class="label">Categories</label>
+              <div class="block">
+                <div class="level-left">
+                  <label class="label">Tag</label>
+                </div>
+                <div class="level-left">
+                  <span
+                    class="tag is-info mr-2"
+                    v-for="tag in game.detail.genres"
+                    :key="tag.id"
+                  >
+                    {{ tag.description }}
+                  </span>
+                </div>
               </div>
-              <div class="level-left">
-                <span class="tag is-info mr-2" v-for="category in game.detail.categories" :key="category.id">
-                  {{ category.description }}
-                </span>
-              </div>
-            </div>
-            <div class="block">
-              <div class="level-left">
-                <label class="label">Tag</label>
-              </div>
-              <div class="level-left">
-                <span class="tag is-info mr-2" v-for="tag in game.detail.genres" :key="tag.id">
-                  {{ tag.description }}
-                </span>
-              </div>
-            </div>
-            <div class="block">
-              <div class="level-left">
-                <label class="label">Price</label>
-              </div>
-              <div class="level-left">
-                <p v-if="game.detail.is_free">Free</p>
-                <p v-else-if="'price_overview' in game.detail"> {{ game.detail.price_overview.final_formatted }} </p>
+              <div class="block">
+                <div class="level-left">
+                  <label class="label">Price</label>
+                </div>
+                <div class="level-left">
+                  <p v-if="game.detail.is_free">Free</p>
+                  <p v-else-if="'price_overview' in game.detail">
+                    {{ game.detail.price_overview.final_formatted }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Steam from '../api/steam.js'
+import Steam from "../api/steam.js";
 
 export default {
   name: "Result",
 
   mounted() {
-    this.getAllGames()
+    this.getAllGames();
   },
 
   data() {
@@ -71,9 +83,26 @@ export default {
 
   methods: {
     async getAllGames() {
-      this.gameList = await Steam.getAllGames()
-    }
-  }
+      this.gameList = await Steam.getAllGames();
+      await this.filterGameByReview();
+      await this.sortGameByReviewScore();
+    },
+    filterGameByReview() {
+      console.log("filter");
+      this.gameList.forEach((game) => {
+        if (game.review.total_reviews <= 0) {
+          let index = this.gameList.indexOf(game);
+          this.gameList.splice(index, 1);
+        }
+      });
+    },
+    sortGameByReviewScore() {
+      console.log("sort");
+      this.gameList.review.review_score.sort((a, b) => {
+        return a - b;
+      });
+    },
+  },
 };
 </script>
 
