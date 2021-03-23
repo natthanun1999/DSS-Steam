@@ -1,9 +1,14 @@
 <template>
-  <div class="container mt-1 " style="margin-bottom: 2em;">
+  <div class="container mt-1" style="margin-bottom: 2em">
     <h2 class="title is-1">Result</h2>
-
     <div v-for="(game, index) in gameList" :key="game._id">
-      <div class="box mb-5" v-if="game.review.total_reviews > 0">
+      <div
+        class="box mb-5"
+        v-if="
+          game.review.total_reviews > 0 &&
+            game.review.review_score_desc != 'Negative'
+        "
+      >
         <article class="media">
           <div class="media-left">
             <img :src="game.detail.header_image" />
@@ -22,7 +27,7 @@
                 <div class="level-left">
                   <label class="label">Categories</label>
                 </div>
-                <div class="level-left">
+                <div class="level-left cs-tag">
                   <span
                     class="tag is-info mr-2"
                     v-for="category in game.detail.categories"
@@ -48,6 +53,16 @@
               </div>
               <div class="block">
                 <div class="level-left">
+                  <star-rating
+                    :max-rating="10"
+                    :star-size="20"
+                    :rating="game.review.review_score"
+                    :read-only="true"
+                  ></star-rating>
+                </div>
+              </div>
+              <div class="block">
+                <div class="level-left">
                   <label class="label">Price</label>
                 </div>
                 <div class="level-left">
@@ -67,10 +82,14 @@
 
 <script>
 import Steam from "../api/steam.js";
+import StarRating from "vue-star-rating";
 
 export default {
   name: "Result",
   props: ["tags", "categories"],
+  components: {
+    StarRating,
+  },
   mounted() {
     this.getAllGames();
   },
@@ -84,6 +103,9 @@ export default {
   methods: {
     async getAllGames() {
       this.gameList = await Steam.getAllGames();
+    },
+    check() {
+      this.tags;
     },
   },
 };
@@ -104,5 +126,14 @@ li {
 }
 a {
   color: #42b983;
+}
+.cs-tag {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cs-tag span {
+  margin: 2px 0;
 }
 </style>

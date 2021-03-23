@@ -125,7 +125,6 @@ export default {
   methods: {
     toggleTag(tag) {
       tag.status = !tag.status;
-
       if (tag.status) {
         document.getElementById(tag.name).className = "tag is-success";
       } else {
