@@ -70,7 +70,7 @@ import Steam from "../api/steam.js";
 
 export default {
   name: "Result",
-  props: ["tags"],
+  props: ["tags", "categories"],
   mounted() {
     this.getAllGames();
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld />
-    <Result v-if="wantResult" tags="tags" />
+    <Result v-if="wantResult" tags="tags" categories="categories" />
   </div>
 </template>
 
@@ -26,12 +26,14 @@ export default {
     return {
       wantResult: false,
       tags: [],
+      categories: [],
     };
   },
 
   methods: {
-    getResult(filter_tag) {
+    getResult(filter_tag, filter_category) {
       this.tags = filter_tag;
+      this.categories = filter_category;
       this.wantResult = true;
     },
   },

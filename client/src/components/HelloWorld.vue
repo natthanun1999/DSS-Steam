@@ -23,7 +23,6 @@
             <article class="tile is-child notification is-danger">
               <p class="title">Age</p>
               <p class="subtitle">What's your age?</p>
-
               <input
                 class="input ml-2"
                 type="text"
@@ -32,19 +31,29 @@
               />
             </article>
           </div>
-
           <div class="tile is-parent">
             <article class="tile is-child notification is-warning">
               <p class="title">Categories</p>
-              <p class="subtitle">Bottom tile</p>
-
-              <div class="select">
+              <p class="subtitle">Play Categories</p>
+              <!-- <div class="select">
                 <select>
                   <option value="-1">Select Types</option>
                   <option value="1">Single Player</option>
                   <option value="2">Multi Player</option>
                   <option value="3">Both</option>
                 </select>
+              </div> -->
+              <div style="display: flex">
+                <div
+                  class="block mr-2"
+                  v-for="category in categories"
+                  :key="category.name"
+                  @click="toggleCategory(category)"
+                >
+                  <span class="tag is-info is-light" :id="category.name">
+                    {{ category.name }}
+                  </span>
+                </div>
               </div>
             </article>
           </div>
@@ -61,7 +70,7 @@
                   class="block mr-2"
                   v-for="tag in tags"
                   :key="tag.name"
-                  @click="toggle(tag)"
+                  @click="toggleTag(tag)"
                 >
                   <span class="tag is-success is-light" :id="tag.name">
                     {{ tag.name }}
@@ -103,13 +112,18 @@ export default {
         { status: false, name: "Sports" },
         { status: false, name: "Strategy" },
         { status: false, name: "Tabletop" },
+        { status: false, name: "Indie" },
       ],
-      category: "",
+      categories: [
+        { status: false, name: "Single Player" },
+        { status: false, name: "Multi Player" },
+        { status: false, name: "Co-op" },
+      ],
     };
   },
 
   methods: {
-    toggle(tag) {
+    toggleTag(tag) {
       tag.status = !tag.status;
 
       if (tag.status) {
@@ -118,10 +132,23 @@ export default {
         document.getElementById(tag.name).className = "tag is-success is-light";
       }
     },
+    toggleCategory(category) {
+      category.status = !category.status;
+
+      if (category.status) {
+        document.getElementById(category.name).className = "tag is-info";
+      } else {
+        document.getElementById(category.name).className =
+          "tag is-info is-light";
+      }
+    },
     findResult() {
       let filter_tag = this.tags.filter((tag) => tag.status === true);
+      let filter_category = this.categories.filter(
+        (category) => category.status === true
+      );
       console.log(filter_tag);
-      window.eventBus.$emit("getResult", filter_tag);
+      window.eventBus.$emit("getResult", filter_tag, filter_category);
     },
   },
 };
