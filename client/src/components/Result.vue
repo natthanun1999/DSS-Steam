@@ -97,16 +97,19 @@ export default {
   data() {
     return {
       gameList: [],
+      gameByFilter: [],
     };
   },
 
   methods: {
     async getAllGames() {
       this.gameList = await Steam.getAllGames();
+      await this.filterByTags();
     },
     check() {
       this.tags;
     },
+    filterByTags() {},
   },
 };
 </script>

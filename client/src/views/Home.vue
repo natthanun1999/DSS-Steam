@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld />
-    <Result v-if="wantResult" tags="tags" categories="categories" />
+    <Result v-if="wantResult" :tags="tags" :categories="categories" />
   </div>
 </template>
 
