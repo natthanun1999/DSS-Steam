@@ -146,7 +146,6 @@ export default {
       let filter_category = this.categories.filter(
         (category) => category.status === true
       );
-      console.log(filter_tag);
       window.eventBus.$emit("getResult", filter_tag, filter_category);
     },
   },

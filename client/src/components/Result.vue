@@ -104,12 +104,23 @@ export default {
   methods: {
     async getAllGames() {
       this.gameList = await Steam.getAllGames();
-      await this.filterByTags();
+      this.filterByTags();
     },
     check() {
       this.tags;
     },
-    filterByTags() {},
+    filterByTags() {
+      this.gameByFilter = this.gameList.filter((v) => {
+        if (!('genres' in v.detail)) return false
+
+        let tagsName = this.tags.map((t) => t.name)
+        let genres = v.detail.genres.map((g) => g.description)
+
+        return tagsName.some((n) => genres.indexOf(n) >= 0)
+      })
+
+      this.gameList = this.gameByFilter
+    },
   },
 };
 </script>
