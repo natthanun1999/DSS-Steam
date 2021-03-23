@@ -115,8 +115,8 @@ export default {
         { status: false, name: "Indie" },
       ],
       categories: [
-        { status: false, name: "Single Player" },
-        { status: false, name: "Multi Player" },
+        { status: false, name: "Single-player" },
+        { status: false, name: "Multi-player" },
         { status: false, name: "Co-op" },
       ],
     };

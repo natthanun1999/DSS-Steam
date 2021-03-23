@@ -105,21 +105,35 @@ export default {
     async getAllGames() {
       this.gameList = await Steam.getAllGames();
       this.filterByTags();
+      this.filterByCategories();
     },
     check() {
       this.tags;
     },
     filterByTags() {
+      // this.gameByFilter = [];
+      console.log(Object.keys(this.tags).length);
       this.gameByFilter = this.gameList.filter((v) => {
-        if (!('genres' in v.detail)) return false
+        if (!("genres" in v.detail)) return false;
 
-        let tagsName = this.tags.map((t) => t.name)
-        let genres = v.detail.genres.map((g) => g.description)
+        let tagsName = this.tags.map((t) => t.name);
+        let genres = v.detail.genres.map((g) => g.description);
 
-        return tagsName.some((n) => genres.indexOf(n) >= 0)
-      })
+        return tagsName.some((n) => genres.indexOf(n) >= 0);
+      });
+      console.log(this.gameByFilter);
+      this.gameList = this.gameByFilter;
+    },
+    filterByCategories() {
+      this.gameByFilter = this.gameList.filter((v) => {
+        if (!("categories" in v.detail)) return false;
 
-      this.gameList = this.gameByFilter
+        let categoriesName = this.categories.map((c) => c.name);
+        let categories = v.detail.categories.map((c) => c.description);
+        return categoriesName.some((n) => categories.indexOf(n) >= 0);
+      });
+      console.log(this.gameByFilter);
+      this.gameList = this.gameByFilter;
     },
   },
 };
