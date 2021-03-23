@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld />
-    <Result v-if="wantResult" :tags="tags" :categories="categories" />
+    <Result />
   </div>
 </template>
 
@@ -16,26 +16,6 @@ export default {
   components: {
     HelloWorld,
     Result,
-  },
-
-  mounted() {
-    window.eventBus.$on("getResult", this.getResult);
-  },
-
-  data() {
-    return {
-      wantResult: false,
-      tags: [],
-      categories: [],
-    };
-  },
-
-  methods: {
-    getResult(filter_tag, filter_category) {
-      this.tags = filter_tag;
-      this.categories = filter_category;
-      this.wantResult = true;
-    },
   },
 };
 </script>

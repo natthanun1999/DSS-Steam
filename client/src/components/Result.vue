@@ -1,5 +1,9 @@
 <template>
-  <div class="container mt-1" style="margin-bottom: 2em">
+  <div
+    class="container mt-1"
+    style="margin-bottom: 2em"
+    v-if="gameList.length > 0"
+  >
     <h2 class="title is-1">Result</h2>
     <div v-for="(game, index) in gameList" :key="game._id">
       <div
@@ -86,29 +90,30 @@ import StarRating from "vue-star-rating";
 
 export default {
   name: "Result",
-  props: ["tags", "categories"],
   components: {
     StarRating,
   },
   mounted() {
-    this.getAllGames();
+    window.eventBus.$on("getResult", this.getResult);
   },
 
   data() {
     return {
       gameList: [],
       gameByFilter: [],
+      tags: [],
+      categories: [],
     };
   },
 
   methods: {
-    async getAllGames() {
+    async getResult(filter_tag, filter_category) {
+      console.log("get res");
       this.gameList = await Steam.getAllGames();
+      this.tags = filter_tag;
+      this.categories = filter_category;
       this.filterByTags();
       this.filterByCategories();
-    },
-    check() {
-      this.tags;
     },
     filterByTags() {
       // this.gameByFilter = [];
