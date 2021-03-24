@@ -103,20 +103,25 @@ export default {
       gameByFilter: [],
       tags: [],
       categories: [],
+      budget: 0,
+      age: 0,
     };
   },
 
   methods: {
-    async getResult(filter_tag, filter_category) {
+    async getResult(filter_tag, filter_category, filter_budget, filter_age) {
       console.log("get res");
       this.gameList = await Steam.getAllGames();
       this.tags = filter_tag;
       this.categories = filter_category;
+      this.budget = filter_budget;
+      this.age = filter_age;
       this.filterByTags();
       this.filterByCategories();
+      this.filterByBudget();
+      this.filterByAge();
     },
     filterByTags() {
-      // this.gameByFilter = [];
       console.log(Object.keys(this.tags).length);
       this.gameByFilter = this.gameList.filter((v) => {
         if (!("genres" in v.detail)) return false;
@@ -137,7 +142,20 @@ export default {
         let categories = v.detail.categories.map((c) => c.description);
         return categoriesName.some((n) => categories.indexOf(n) >= 0);
       });
-      console.log(this.gameByFilter);
+      // console.log(this.gameByFilter);
+      this.gameList = this.gameByFilter;
+    },
+    filterByBudget() {
+      this.gameByFilter = this.gameList.filter((game) => {
+        if (game.detail.is_free) return true;
+        if (game.detail.price_overview.final / 100 <= this.budget) return true;
+      });
+      this.gameList = this.gameByFilter;
+    },
+    filterByAge() {
+      this.gameByFilter = this.gameList.filter((game) => {
+        if (game.detail.required_age <= this.age) return true;
+      });
       this.gameList = this.gameByFilter;
     },
   },

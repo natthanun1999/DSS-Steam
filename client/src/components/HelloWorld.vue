@@ -14,7 +14,7 @@
                 class="input ml-2"
                 type="text"
                 placeholder="Enter your budget"
-                required
+                v-model="budget"
               />
             </article>
           </div>
@@ -27,7 +27,7 @@
                 class="input ml-2"
                 type="text"
                 placeholder="Enter your age"
-                required
+                v-model="age"
               />
             </article>
           </div>
@@ -35,14 +35,6 @@
             <article class="tile is-child notification is-warning">
               <p class="title">Categories</p>
               <p class="subtitle">Play Categories</p>
-              <!-- <div class="select">
-                <select>
-                  <option value="-1">Select Types</option>
-                  <option value="1">Single Player</option>
-                  <option value="2">Multi Player</option>
-                  <option value="3">Both</option>
-                </select>
-              </div> -->
               <div style="display: flex">
                 <div
                   class="block mr-2"
@@ -119,6 +111,8 @@ export default {
         { status: false, name: "Multi-player" },
         { status: false, name: "Co-op" },
       ],
+      budget: 0,
+      age: 0,
     };
   },
 
@@ -142,11 +136,20 @@ export default {
       }
     },
     findResult() {
+      let filter_age = this.age;
+      let filter_budget = this.budget;
       let filter_tag = this.tags.filter((tag) => tag.status === true);
       let filter_category = this.categories.filter(
         (category) => category.status === true
       );
-      window.eventBus.$emit("getResult", filter_tag, filter_category);
+
+      window.eventBus.$emit(
+        "getResult",
+        filter_tag,
+        filter_category,
+        filter_budget,
+        filter_age
+      );
     },
   },
 };
