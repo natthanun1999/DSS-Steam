@@ -150,6 +150,44 @@ export default {
         filter_budget,
         filter_age
       );
+
+     /*
+      for(let i = 0; i < 1000; i++) {
+        this.randomMockUp()
+      }
+      alert("Mockup Successful.")
+      */
+    },
+    randomMockUp() {
+      let tmpTags = this.tags.map((v) => {
+        let rand = (Math.random() < 0.5) ? true : false;
+        v.status = rand
+
+        return v
+      })
+
+      let tmpCategories = this.categories.map((v) => {
+        let rand = (Math.random() < 0.5) ? true : false;
+        v.status = rand
+
+        return v
+      })
+
+      let filter_age = Math.floor(Math.random() * 29) + 12; // 12 - 40
+      let filter_budget = Math.floor(Math.random() * 2000); //  0 - 2000
+
+      filter_budget = Math.round(filter_budget / 50) * 50
+      
+      let filter_tag = tmpTags.filter((tag) => tag.status === true);
+      let filter_category = tmpCategories.filter((category) => category.status === true);
+
+      window.eventBus.$emit(
+        "getResult",
+        filter_tag,
+        filter_category,
+        filter_budget,
+        filter_age
+      );
     },
   },
 };

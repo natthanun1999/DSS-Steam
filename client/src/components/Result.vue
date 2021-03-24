@@ -1,4 +1,7 @@
 <template>
+  <!--
+  <button type="button" class="button is-danger" @click="convert">Convert to CSV</button>
+  -->
   <div
     class="container mt-1"
     style="margin-bottom: 2em"
@@ -8,10 +11,7 @@
     <div v-for="(game, index) in gameList" :key="game._id">
       <div
         class="box mb-5"
-        v-if="
-          game.review.total_reviews > 0 &&
-            game.review.review_score_desc != 'Negative'
-        "
+        v-if="game.review.total_reviews > 0"
       >
         <article class="media">
           <div class="media-left">
@@ -76,6 +76,11 @@
                   </p>
                 </div>
               </div>
+              <div class="block">
+                <div class="level-left">
+                  <button class="button is-primary" type="button" @click="openGame(game.appid)">Show in Steam</button>
+                </div>
+              </div>
             </div>
           </div>
         </article>
@@ -87,6 +92,7 @@
 <script>
 import Steam from "../api/steam.js";
 import StarRating from "vue-star-rating";
+//import { mockup, convertToCSV } from "../helpers/json2csv.js"
 
 export default {
   name: "Result",
@@ -109,20 +115,29 @@ export default {
   },
 
   methods: {
-    async getResult(filter_tag, filter_category, filter_budget, filter_age) {
-      console.log("get res");
+    async getResult(tags, categories, budget, age) {
       this.gameList = await Steam.getAllGames();
-      this.tags = filter_tag;
-      this.categories = filter_category;
-      this.budget = filter_budget;
-      this.age = filter_age;
+
+      this.tags       = tags;
+      this.categories = categories;
+      this.budget     = budget;
+      this.age        = age;
+
       this.filterByTags();
       this.filterByCategories();
       this.filterByBudget();
       this.filterByAge();
+
+      // Get top 5 ranks
+      this.gameList = this.gameList.slice(0, 5)
+
+      /*
+      let gameIndex = Math.floor(Math.random() * 5) + 1
+
+      this.openGame(gameIndex)
+      */
     },
     filterByTags() {
-      console.log(Object.keys(this.tags).length);
       this.gameByFilter = this.gameList.filter((v) => {
         if (!("genres" in v.detail)) return false;
 
@@ -131,7 +146,7 @@ export default {
 
         return tagsName.some((n) => genres.indexOf(n) >= 0);
       });
-      console.log(this.gameByFilter);
+
       this.gameList = this.gameByFilter;
     },
     filterByCategories() {
@@ -140,9 +155,10 @@ export default {
 
         let categoriesName = this.categories.map((c) => c.name);
         let categories = v.detail.categories.map((c) => c.description);
+
         return categoriesName.some((n) => categories.indexOf(n) >= 0);
       });
-      // console.log(this.gameByFilter);
+
       this.gameList = this.gameByFilter;
     },
     filterByBudget() {
@@ -150,14 +166,31 @@ export default {
         if (game.detail.is_free) return true;
         if (game.detail.price_overview.final / 100 <= this.budget) return true;
       });
+
       this.gameList = this.gameByFilter;
     },
     filterByAge() {
       this.gameByFilter = this.gameList.filter((game) => {
         if (game.detail.required_age <= this.age) return true;
       });
+
       this.gameList = this.gameByFilter;
     },
+    openGame(appid) {
+      /*
+      let categoriesName  = this.categories.map((c) => c.name);
+      let tagsName        = this.tags.map((t) => t.name);
+
+      mockup(this.budget, this.age, categoriesName, tagsName, gameIndex)
+      */
+
+      window.open(`https://store.steampowered.com/app/${appid}`)
+    },
+    /*
+    convert() {
+      convertToCSV()
+    }
+    */
   },
 };
 </script>

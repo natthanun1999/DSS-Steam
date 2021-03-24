@@ -1,9 +1,5 @@
 const axios = require('axios')
 const Promise = require('bluebird')
-
-const mongoose = require('mongoose')
-
-const helpers = require('../helpers/steam.js')
 const Game = require('../models/game.js')
 
 const getAllGames = (req, res) => {
@@ -14,7 +10,7 @@ const getAllGames = (req, res) => {
             .then(async (response) => {
                 //let appids = getOnlyAppID(response.data.applist.apps)
                 
-                let appids = response.data.slice(250, 300)
+                let appids = response.data.slice(250, 300) // Go up
                 
                 let gamesDetails = await getGamesDetail(appids)
 

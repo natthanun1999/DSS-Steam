@@ -1,0 +1,26 @@
+[
+	{
+		"budget": 100,
+		"age": 20,
+		"categories": {
+			"SinglePlayer" : "Yes",
+			"MultiPlayer" : "Yes",
+			"Coop" : "Yes"
+		},
+		"tags": {
+			"Action" : "Yes",
+			"Adventure" : "Yes",
+			"Casual" : "Yes",
+			"Experimental" : "Yes",
+			"Puzzel" : "Yes",
+			"Racing" : "Yes",
+			"RPG" : "Yes",
+			"Simulation" : "Yes",
+			"Sports" : "Yes",
+			"Strategy" : "Yes",
+			"Tabletop" : "Yes",
+			"Indie" : "Yes"
+		},
+		"gameIndex": 3
+	}
+]
