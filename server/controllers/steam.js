@@ -10,7 +10,7 @@ const getAllGames = (req, res) => {
             .then(async (response) => {
                 //let appids = getOnlyAppID(response.data.applist.apps)
                 
-                let appids = response.data.slice(250, 300) // Go up
+                let appids = response.data.slice(800, 850) // Go up
                 
                 let gamesDetails = await getGamesDetail(appids)
 
@@ -53,7 +53,7 @@ const getOnlyAppID = (games) => {
 
     appids.sort((a, b) => b - a)
 
-    return appids.slice(25000, 26000)
+    return appids.slice(35000, 36000)
 }
 
 const getGamesDetail = async (appids) => {
