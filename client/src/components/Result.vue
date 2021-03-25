@@ -168,6 +168,7 @@ export default {
     filterByBudget() {
       this.gameByFilter = this.gameList.filter((game) => {
         if (game.detail.is_free) return true;
+        if (!("price_overview" in game.detail)) return false;
         if (game.detail.price_overview.final / 100 <= this.budget) return true;
       });
 
