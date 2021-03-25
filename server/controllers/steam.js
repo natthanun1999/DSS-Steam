@@ -9,8 +9,8 @@ const getAllGames = (req, res) => {
         axios.get("http://127.0.0.1:9000/appids")
             .then(async (response) => {
                 //let appids = getOnlyAppID(response.data.applist.apps)
-                
-                let appids = response.data.slice(750, 800) // Go up
+
+                let appids = response.data.slice(0, 50) // Go up
                 
                 let gamesDetails = await getGamesDetail(appids)
 
@@ -53,7 +53,7 @@ const getOnlyAppID = (games) => {
 
     appids.sort((a, b) => b - a)
 
-    return appids.slice(40000, 41000)
+    return appids.slice(41000, 43000)
 }
 
 const getGamesDetail = async (appids) => {

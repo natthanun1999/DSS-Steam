@@ -81,7 +81,7 @@
               </div>
               <div class="block">
                 <div class="level-left">
-                  <button class="button is-primary" type="button" @click="openGame(index + 1)">Show in Steam</button>
+                  <button class="button is-primary" type="button" @click="openGame(game.appid, index + 1)">Show in Steam</button>
                 </div>
               </div>
             </div>
@@ -134,6 +134,7 @@ export default {
       // Get top 5 ranks
       this.gameList = this.gameList.slice(0, 5)
 
+      console.log("Query Success!")
       /*
       let gameIndex = Math.floor(Math.random() * 5) + 1
 
@@ -179,13 +180,13 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
-    openGame(gameIndex) {
+    openGame(appid, gameIndex) {
       let categoriesName  = this.categories.map((c) => c.name);
       let tagsName        = this.tags.map((t) => t.name);
 
       mockup(this.budget, this.age, categoriesName, tagsName, gameIndex)
 
-      console.log("Added!")
+      console.log(`App id : ${appid}`)
 
       //window.open(`https://store.steampowered.com/app/${appid}`)
     },
