@@ -185,6 +185,8 @@ export default {
 
       mockup(this.budget, this.age, categoriesName, tagsName, gameIndex)
 
+      console.log("Added!")
+
       //window.open(`https://store.steampowered.com/app/${appid}`)
     },
     convert() {
