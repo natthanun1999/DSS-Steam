@@ -44,6 +44,7 @@ const convertToCSV = () => {
     const csv = json2csvParser.parse(mockupData);
 
     console.log(csv)
+	console.log(mockupData.length)
 }
 
 module.exports = {

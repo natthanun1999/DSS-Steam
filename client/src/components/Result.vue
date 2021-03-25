@@ -8,6 +8,9 @@
     v-if="gameList.length > 0"
   >
     <h2 class="title is-1">Result</h2>
+    
+    <button type="button" class="button is-danger" @click="convert">Convert to CSV</button>
+
     <div v-for="(game, index) in gameList" :key="game._id">
       <div
         class="box mb-5"
@@ -78,7 +81,7 @@
               </div>
               <div class="block">
                 <div class="level-left">
-                  <button class="button is-primary" type="button" @click="openGame(game.appid)">Show in Steam</button>
+                  <button class="button is-primary" type="button" @click="openGame(index + 1)">Show in Steam</button>
                 </div>
               </div>
             </div>
@@ -92,7 +95,7 @@
 <script>
 import Steam from "../api/steam.js";
 import StarRating from "vue-star-rating";
-//import { mockup, convertToCSV } from "../helpers/json2csv.js"
+import { mockup, convertToCSV } from "../helpers/json2csv.js"
 
 export default {
   name: "Result",
@@ -176,21 +179,17 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
-    openGame(appid) {
-      /*
+    openGame(gameIndex) {
       let categoriesName  = this.categories.map((c) => c.name);
       let tagsName        = this.tags.map((t) => t.name);
 
       mockup(this.budget, this.age, categoriesName, tagsName, gameIndex)
-      */
 
-      window.open(`https://store.steampowered.com/app/${appid}`)
+      //window.open(`https://store.steampowered.com/app/${appid}`)
     },
-    /*
     convert() {
       convertToCSV()
     }
-    */
   },
 };
 </script>
