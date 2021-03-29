@@ -130,9 +130,10 @@ export default {
       this.filterByCategory();
       this.filterByBudget();
       this.filterByAge();
+      this.filterByScore();
 
       // Get top 5 ranks
-      this.gameList = this.gameList.slice(0, 5)
+      this.gameList = this.gameList.slice(0, 10)
 
       console.log("Query Success!")
 
@@ -175,6 +176,26 @@ export default {
       this.gameByFilter = this.gameList.filter((game) => {
         if (game.detail.required_age <= this.age) return true;
       });
+
+      this.gameList = this.gameByFilter;
+    },
+    filterByScore() {
+      this.gameByFilter = this.gameList.sort((a, b) => {
+        const diff_A = a.review.total_positive - a.review.total_negative
+        const diff_B = b.review.total_positive - b.review.total_negative
+
+        if ((diff_A - diff_B) < 1000) {
+          const diff_Total = a.review.total_reviews - b.review.total_reviews
+
+          if (diff_Total > 0) return -1;
+          else if (diff_Total < 0) return 1;
+          else return 0;
+        }
+
+        if (diff_A > diff_B) return -1;
+        else if (diff_A < diff_B) return 1;
+        else return 0;
+      })
 
       this.gameList = this.gameByFilter;
     },
