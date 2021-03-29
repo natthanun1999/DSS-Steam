@@ -2,7 +2,7 @@ const { Parser } = require('json2csv');
 
 const mockupData = []
 
-const mockup = (budget, age, category, tag, choose) => {
+const mockup = (budget, age, category, tag, gameIndex) => {
 	if (budget == 499) budget = "A"
 	else if (budget == 1000) budget = "B"
 	else budget = "C"
@@ -15,7 +15,7 @@ const mockup = (budget, age, category, tag, choose) => {
 		"age": age,
 		"category": category,
 		"tag": tag,
-		"choose": choose
+		"gameIndex": gameIndex
 	}
 
     mockupData.push(tmpData)
@@ -24,7 +24,7 @@ const mockup = (budget, age, category, tag, choose) => {
 const convertToCSV = () => {
     const fields = ['budget', 'age',
                     'category', 'tag',
-                    'choose'];
+                    'gameIndex'];
 
     const json2csvParser = new Parser({ fields });
 

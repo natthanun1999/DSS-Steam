@@ -81,8 +81,7 @@
               </div>
               <div class="block">
                 <div class="level-left">
-                  <button class="button is-primary mr-3" type="button" @click="openGame(game.appid, 'Yes')">Interest</button>
-                  <button class="button is-danger" type="button" @click="openGame(game.appid, 'No')">Nothing</button>
+                  <button class="button is-primary" type="button" @click="openGame(game.appid, index + 1)">Show in Steam</button>
                 </div>
               </div>
             </div>
@@ -134,7 +133,7 @@ export default {
       this.filterByScore();
 
       // Get top 5 ranks
-      this.gameList = this.gameList.slice(0, 1)
+      this.gameList = this.gameList.slice(0, 3)
 
       console.log("Query Success!")
 
@@ -200,8 +199,8 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
-    openGame(appid, choose) {
-      mockup(this.budget, this.age, this.category, this.tag, choose)
+    openGame(appid, gameIndex) {
+      mockup(this.budget, this.age, this.category, this.tag, gameIndex)
 
       console.log(`App id : ${appid}`)
 
