@@ -7,45 +7,47 @@
         <div class="tile">
           <div class="tile is-parent is-vertical">
             <article class="tile is-child notification is-primary">
-              <p class="title">Budget</p>
-              <p class="subtitle">Show me you buck</p>
+              <p class="title ml-2">Budget</p>
+              <p class="subtitle ml-2">Show me you buck</p>
 
-              <input
-                class="input ml-2"
-                type="text"
-                placeholder="Enter your budget"
-                v-model="budget"
-              />
+              <div class="select is-normal ml-2">
+                <select v-model="budget">
+                  <option value="499" selected>Less than 500฿</option>
+                  <option value="1000">500฿ - 1000฿</option>
+                  <option value="2000">More than 1000฿</option>
+                </select>
+              </div>
             </article>
           </div>
 
           <div class="tile is-parent is-vertical">
             <article class="tile is-child notification is-danger">
-              <p class="title">Age</p>
-              <p class="subtitle">What's your age?</p>
-              <input
-                class="input ml-2"
-                type="text"
-                placeholder="Enter your age"
-                v-model="age"
-              />
+              <p class="title ml-2">Age</p>
+              <p class="subtitle ml-2">What's your age?</p>
+
+              <div class="select is-normal ml-2">
+                <select v-model="age">
+                  <option value="17" selected>Less than 18</option>
+                  <option value="30">More than 18</option>
+                </select>
+              </div>
             </article>
           </div>
           <div class="tile is-parent">
             <article class="tile is-child notification is-warning">
               <p class="title">Categories</p>
               <p class="subtitle">Play Categories</p>
-              <div style="display: flex">
-                <div
-                  class="block mr-2"
-                  v-for="category in categories"
-                  :key="category.name"
-                  @click="toggleCategory(category)"
-                >
-                  <span class="tag is-info is-light" :id="category.name">
+
+              <div class="select is-normal">
+                <select v-model="category">
+                  <option value="0" selected disabled>Select categories</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.name"
+                    :value="category.name">
                     {{ category.name }}
-                  </span>
-                </div>
+                  </option>
+                </select>
               </div>
             </article>
           </div>
@@ -57,28 +59,28 @@
               <p class="title">Tags</p>
               <p class="subtitle">Bruh bruh bruh....</p>
 
-              <div style="display: flex">
-                <div
-                  class="block mr-2"
-                  v-for="tag in tags"
-                  :key="tag.name"
-                  @click="toggleTag(tag)"
-                >
-                  <span class="tag is-success is-light" :id="tag.name">
+              <div class="select is-normal">
+                <select v-model="tag">
+                  <option value="0" selected disabled>Select tags</option>
+                  <option
+                    v-for="tag in tags"
+                    :key="tag.name"
+                    :value="tag.name">
                     {{ tag.name }}
-                  </span>
-                </div>
+                  </option>
+                </select>
               </div>
             </article>
           </div>
 
           <div class="tile is-parent">
             <article class="tile is-child notification is-danger">
-              <div class="content">
-                <button class="button is-success" @click="findResult">
-                  Find games!
-                </button>
-              </div>
+              <p class="title">Let's Go!</p>
+              <p class="subtitle">Find game for ME!</p>
+
+              <button class="button is-success" @click="findResult">
+                Find games!
+              </button>
             </article>
           </div>
         </div>
@@ -93,100 +95,77 @@ export default {
   data() {
     return {
       tags: [
-        { status: false, name: "Action" },
-        { status: false, name: "Adventure" },
-        { status: false, name: "Casual" },
-        { status: false, name: "Experimental" },
-        { status: false, name: "Puzzel" },
-        { status: false, name: "Racing" },
-        { status: false, name: "RPG" },
-        { status: false, name: "Simulation" },
-        { status: false, name: "Sports" },
-        { status: false, name: "Strategy" },
-        { status: false, name: "Tabletop" },
-        { status: false, name: "Indie" },
+        { id: 1, name: "Action" },
+        { id: 2, name: "Adventure" },
+        { id: 3, name: "Casual" },
+        { id: 4, name: "Experimental" },
+        { id: 5, name: "Puzzel" },
+        { id: 6, name: "Racing" },
+        { id: 7, name: "RPG" },
+        { id: 8, name: "Simulation" },
+        { id: 9, name: "Sports" },
+        { id: 10, name: "Strategy" },
+        { id: 11, name: "Tabletop" },
+        { id: 12, name: "Indie" },
       ],
       categories: [
-        { status: false, name: "Single-player" },
-        { status: false, name: "Multi-player" },
-        { status: false, name: "Co-op" },
+        { id: 1, name: "Single-player" },
+        { id: 2, name: "Multi-player" },
+        { id: 3, name: "Co-op" },
       ],
-      budget: 0,
-      age: 0,
+      tag: 0,
+      category: 0,
+      budget: 499,
+      age: 17,
     };
   },
 
   methods: {
-    toggleTag(tag) {
-      tag.status = !tag.status;
-      if (tag.status) {
-        document.getElementById(tag.name).className = "tag is-success";
-      } else {
-        document.getElementById(tag.name).className = "tag is-success is-light";
-      }
-    },
-    toggleCategory(category) {
-      category.status = !category.status;
-
-      if (category.status) {
-        document.getElementById(category.name).className = "tag is-info";
-      } else {
-        document.getElementById(category.name).className =
-          "tag is-info is-light";
-      }
-    },
     findResult() {
-      let filter_age = this.age;
-      let filter_budget = this.budget;
-      let filter_tag = this.tags.filter((tag) => tag.status === true);
-      let filter_category = this.categories.filter(
-        (category) => category.status === true
-      );
-
+      const self = this
+      
       window.eventBus.$emit(
         "getResult",
-        filter_tag,
-        filter_category,
-        filter_budget,
-        filter_age
+        self.tag,
+        self.category,
+        self.budget,
+        self.age
       );
 
-     /*
+      /*
       for(let i = 0; i < 1000; i++) {
         this.randomMockUp()
       }
+
       alert("Mockup Successful.")
       */
     },
     randomMockUp() {
-      let tmpTags = this.tags.map((v) => {
-        let rand = (Math.random() < 0.5) ? true : false;
-        v.status = rand
+      const tagIndex      = Math.floor(Math.random() * 12)
+      const categoryIndex = Math.floor(Math.random() * 3)
 
-        return v
-      })
+      let tmpTag      = this.tags[tagIndex]
+      let tmpCategory = this.categories[categoryIndex]
+      let tmpBudget   = Math.floor(Math.random() * 3)
+      let tmpAge      = Math.floor(Math.random() * 2)
 
-      let tmpCategories = this.categories.map((v) => {
-        let rand = (Math.random() < 0.5) ? true : false;
-        v.status = rand
+      switch (tmpBudget) {
+        case 0: tmpBudget = 499; break
+        case 1: tmpBudget = 1000; break
+        case 2: tmpBudget = 2000; break
+      }
 
-        return v
-      })
-
-      let filter_age = Math.floor(Math.random() * 29) + 12; // 12 - 40
-      let filter_budget = Math.floor(Math.random() * 2000); //  0 - 2000
-
-      filter_budget = Math.round(filter_budget / 50) * 50
-      
-      let filter_tag = tmpTags.filter((tag) => tag.status === true);
-      let filter_category = tmpCategories.filter((category) => category.status === true);
+      switch (tmpAge) {
+        case 0: tmpAge = 17; break
+        case 1: tmpAge = 30; break
+      }
 
       window.eventBus.$emit(
         "getResult",
-        filter_tag,
-        filter_category,
-        filter_budget,
-        filter_age
+        tmpTag.name,
+        tmpCategory.name,
+        tmpBudget,
+        tmpAge
       );
     },
   },
@@ -208,27 +187,5 @@ li {
 }
 a {
   color: #42b983;
-}
-.my-checkbox {
-  width: 22%;
-  height: 15%;
-  color: white;
-  background-color: gray;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  border-radius: 3px;
-}
-.my-checkbox span {
-  font-weight: bold;
-  margin-left: 5px;
-}
-.tag:hover {
-  cursor: pointer;
-}
-.content {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 </style>

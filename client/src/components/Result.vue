@@ -1,6 +1,6 @@
 <template>
   <!--
-  <button type="button" class="button is-danger" @click="convert">Convert to CSV</button>
+  <button type="button" class="button is-danger" @click="convert">Convert to CSV</button>\
   -->
   <div
     class="container mt-1"
@@ -110,24 +110,24 @@ export default {
     return {
       gameList: [],
       gameByFilter: [],
-      tags: [],
-      categories: [],
+      tag: null,
+      category: null,
       budget: 0,
       age: 0,
     };
   },
 
   methods: {
-    async getResult(tags, categories, budget, age) {
+    async getResult(tag, category, budget, age) {
       this.gameList = await Steam.getAllGames();
 
-      this.tags       = tags;
-      this.categories = categories;
+      this.tag        = tag;
+      this.category   = category;
       this.budget     = budget;
       this.age        = age;
 
-      this.filterByTags();
-      this.filterByCategories();
+      this.filterByTag();
+      this.filterByCategory();
       this.filterByBudget();
       this.filterByAge();
 
@@ -135,32 +135,29 @@ export default {
       this.gameList = this.gameList.slice(0, 5)
 
       console.log("Query Success!")
-      /*
-      let gameIndex = Math.floor(Math.random() * 5) + 1
 
-      this.openGame(gameIndex)
-      */
+      // let gameIndex = Math.floor(Math.random() * 5) + 1
+
+      // this.openGame(gameIndex)
     },
-    filterByTags() {
+    filterByTag() {
       this.gameByFilter = this.gameList.filter((v) => {
         if (!("genres" in v.detail)) return false;
 
-        let tagsName = this.tags.map((t) => t.name);
         let genres = v.detail.genres.map((g) => g.description);
 
-        return tagsName.some((n) => genres.indexOf(n) >= 0);
+        return genres.indexOf(this.tag) >= 0
       });
 
       this.gameList = this.gameByFilter;
     },
-    filterByCategories() {
+    filterByCategory() {
       this.gameByFilter = this.gameList.filter((v) => {
         if (!("categories" in v.detail)) return false;
 
-        let categoriesName = this.categories.map((c) => c.name);
         let categories = v.detail.categories.map((c) => c.description);
 
-        return categoriesName.some((n) => categories.indexOf(n) >= 0);
+        return categories.indexOf(this.category) >= 0
       });
 
       this.gameList = this.gameByFilter;
@@ -182,10 +179,7 @@ export default {
       this.gameList = this.gameByFilter;
     },
     openGame(appid, gameIndex) {
-      let categoriesName  = this.categories.map((c) => c.name);
-      let tagsName        = this.tags.map((t) => t.name);
-
-      mockup(this.budget, this.age, categoriesName, tagsName, gameIndex)
+      mockup(this.budget, this.age, this.category, this.tag, gameIndex)
 
       console.log(`App id : ${appid}`)
 
