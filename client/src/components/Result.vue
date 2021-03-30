@@ -133,7 +133,7 @@ export default {
       this.filterByScore();
 
       // Get top 5 ranks
-      this.gameList = this.gameList.slice(0, 3)
+      this.gameList = this.gameList.slice(0, 5)
 
       console.log("Query Success!")
 
