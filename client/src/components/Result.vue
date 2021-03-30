@@ -81,7 +81,7 @@
               </div>
               <div class="block">
                 <div class="level-left">
-                  <button class="button is-primary" type="button" @click="openGame(game.appid)">Show in Steam</button>
+                  <button class="button is-primary" type="button" @click="openGame(game)">Show in Steam</button>
                 </div>
               </div>
             </div>
@@ -199,10 +199,20 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
-    openGame(appid) {
-      mockup(this.budget, this.age, this.category, this.tag, appid)
+    openGame(game) {
+      const tmpData = {
+        budget: this.budget,
+        age: this.age,
+        category: this.category,
+        tag: this.tag,
+        review_score: game.review_score,
+        diff: game.review.total_positive - game.review.total_negative,
+        appid: game.appid
+      }
 
-      console.log(`App id : ${appid}`)
+      mockup(tmpData)
+
+      console.log(`App id : ${tmpData.appid}`)
 
       //window.open(`https://store.steampowered.com/app/${appid}`)
     },
