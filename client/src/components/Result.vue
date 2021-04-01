@@ -5,11 +5,95 @@
   <div
     class="container mt-1"
     style="margin-bottom: 2em"
-    v-if="gameList.length > 0"
+    v-if="gameList.length > 0 && isShow"
   >
+    <h2 class="title is-1">Suggestion</h2>
+
+    <div
+        class="box mb-5"
+        v-if="suggest.review.total_reviews > 0"
+      >
+      <article class="media">
+        <div class="media-left">
+          <img :src="suggest.detail.header_image" />
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <div class="block">
+              <div class="level-left">
+                <label class="label">
+                  Game
+
+                  <span class="tag is-warning ml-2">
+                    <marquee direction="right">Suggestion</marquee>
+                  </span>
+                </label>
+              </div>
+              <div class="level-left">
+                <p>{{ suggest.detail.name }}</p>
+              </div>
+            </div>
+            <div class="block">
+              <div class="level-left">
+                <label class="label">Categories</label>
+              </div>
+              <div class="level-left cs-tag">
+                <span
+                  class="tag is-info mr-2"
+                  v-for="category in suggest.detail.categories"
+                  :key="category.id"
+                >
+                  {{ category.description }}
+                </span>
+              </div>
+            </div>
+            <div class="block">
+              <div class="level-left">
+                <label class="label">Tag</label>
+              </div>
+              <div class="level-left">
+                <span
+                  class="tag is-info mr-2"
+                  v-for="tag in suggest.detail.genres"
+                  :key="tag.id"
+                >
+                  {{ tag.description }}
+                </span>
+              </div>
+            </div>
+            <div class="block">
+              <div class="level-left">
+                <star-rating
+                  :max-rating="10"
+                  :star-size="20"
+                  :rating="suggest.review.review_score"
+                  :read-only="true"
+                ></star-rating>
+              </div>
+            </div>
+            <div class="block">
+              <div class="level-left">
+                <label class="label">Price</label>
+              </div>
+              <div class="level-left">
+                <p v-if="suggest.detail.is_free">Free</p>
+                <p v-else-if="'price_overview' in suggest.detail">
+                  {{ suggest.detail.price_overview.final_formatted }}
+                </p>
+              </div>
+            </div>
+            <div class="block">
+              <div class="level-left">
+                <button class="button is-info mr-2" type="button" @click="openGame(suggest)">Interested</button>
+                <button class="button is-danger" type="button" @click="openGame(suggest)">Nothing</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
     <h2 class="title is-1">Result</h2>
-    
-    <button type="button" class="button is-danger" @click="convert">Convert to CSV</button>
 
     <div v-for="(game, index) in gameList" :key="game._id">
       <div
@@ -90,12 +174,17 @@
       </div>
     </div>
   </div>
+  <div v-else-if="isLoading"
+    class="container mt-1"
+    style="margin-bottom: 2em">
+    <h2 class="title is-1">Loading</h2>
+  </div>
 </template>
 
 <script>
 import Steam from "../api/steam.js";
 import StarRating from "vue-star-rating";
-import { mockup, convertToCSV } from "../helpers/json2csv.js"
+import { convertToCSV } from "../helpers/json2csv.js"
 
 export default {
   name: "Result",
@@ -109,17 +198,25 @@ export default {
   data() {
     return {
       gameList: [],
+      gameListDump: [],
       gameByFilter: [],
+      suggest: null,
       tag: null,
       category: null,
       budget: 0,
       age: 0,
+      predict: null,
+      isShow: false,
+      isLoading: false
     };
   },
 
   methods: {
     async getResult(tag, category, budget, age) {
+      this.isLoading = true
+
       this.gameList = await Steam.getAllGames();
+      this.gameListDump = this.gameList;
 
       this.tag        = tag;
       this.category   = category;
@@ -133,13 +230,15 @@ export default {
       this.filterByScore();
 
       // Get top 5 ranks
-      this.gameList = this.gameList.slice(0, 5)
+      this.gameList = this.gameList.slice(0, 3)
 
       console.log("Query Success!")
 
-      // let gameIndex = Math.floor(Math.random() * 5) + 1
+      await this.getPredict(this.gameList[0])
+      console.log(this.predict)
 
-      // this.openGame(gameIndex)
+      this.isLoading = false
+      this.isShow = true
     },
     filterByTag() {
       this.gameByFilter = this.gameList.filter((v) => {
@@ -199,7 +298,21 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
+    async getPredict(game) {
+      this.predict = await Steam.modelTestCLI({
+        budget: this.budget,
+        age: this.age,
+        category: this.category,
+        tag: this.tag,
+        review_score: game.review_score,
+        diff: game.review.total_positive - game.review.total_negative
+      })
+
+      this.suggest = this.gameListDump.filter((g) => g.appid == this.predict)
+      this.suggest = this.suggest[0]
+    },
     openGame(game) {
+      /*
       const tmpData = {
         budget: this.budget,
         age: this.age,
@@ -213,8 +326,9 @@ export default {
       mockup(tmpData)
 
       console.log(`App id : ${tmpData.appid}`)
+      */
 
-      //window.open(`https://store.steampowered.com/app/${appid}`)
+      window.open(`https://store.steampowered.com/app/${game.appid}`)
     },
     convert() {
       convertToCSV()

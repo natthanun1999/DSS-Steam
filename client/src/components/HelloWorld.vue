@@ -123,7 +123,7 @@ export default {
   methods: {
     findResult() {
       const self = this
-      
+
       window.eventBus.$emit(
         "getResult",
         self.tag,

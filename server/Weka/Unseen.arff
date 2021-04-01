@@ -1,0 +1,12 @@
+@RELATION 'relation Unseen' 
+
+@ATTRIBUTE budget {A,B,C} 
+@ATTRIBUTE age {A,B} 
+@ATTRIBUTE category {Multi-player,Single-player,Co-op} 
+@ATTRIBUTE tag {Casual,Action,Indie,Simulation,Adventure,Racing,Sports,Strategy,RPG} 
+@ATTRIBUTE review_score numeric 
+@ATTRIBUTE diff numeric 
+@ATTRIBUTE gameIndex {359550,550,346110,105600,1085660,887830,877200,934930,882020,413150,881100,4000,887800,289070,570,252490,892970,1313860,1263850,882100,930210,926860,304930,878750,227300,933110,924140,1097150} 
+
+@DATA 
+C, A, Multi-player, Casual, 8, 2375, ? 
