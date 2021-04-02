@@ -1,5 +1,6 @@
 const Game = require('../models/game.js')
 const CLI = require('../helpers/cli.js')
+const CSV = require('../helpers/ReadCSV.js')
 
 const getAllGames = async (req, res) => {
     try {
@@ -23,7 +24,18 @@ const modelTestCLI = (req, res) => {
     }
 }
 
+const getMostPick = (req, res) => {
+    let params = req.body.params;
+
+    try {
+        res.status(200).json(CSV.getMostPick(params))
+    } catch (error) {
+        res.status(404).json({message: error.message})
+    }
+}
+
 module.exports = {
     getAllGames,
-    modelTestCLI
+    modelTestCLI,
+    getMostPick
 }

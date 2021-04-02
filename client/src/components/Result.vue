@@ -84,8 +84,9 @@
             </div>
             <div class="block">
               <div class="level-left">
-                <button class="button is-info mr-2" type="button" @click="openGame(suggest)">Interested</button>
-                <button class="button is-danger" type="button" @click="openGame(suggest)">Nothing</button>
+                <button class="button is-warning" type="button" @click="openGame(suggest)">
+                  <span class="blinking">Interested!</span>
+                </button>
               </div>
             </div>
           </div>
@@ -234,7 +235,7 @@ export default {
 
       console.log("Query Success!")
 
-      await this.getPredict(this.gameList[0])
+      await this.getPredict()
       console.log(this.predict)
 
       this.isLoading = false
@@ -298,14 +299,21 @@ export default {
 
       this.gameList = this.gameByFilter;
     },
-    async getPredict(game) {
+    async getPredict() {
+      let game = await Steam.getMostPick({
+        budget: this.budget,
+        age: this.age,
+        category: this.category,
+        tag: this.tag
+      })
+
       this.predict = await Steam.modelTestCLI({
         budget: this.budget,
         age: this.age,
         category: this.category,
         tag: this.tag,
         review_score: game.review_score,
-        diff: game.review.total_positive - game.review.total_negative
+        diff: game.diff
       })
 
       this.suggest = this.gameListDump.filter((g) => g.appid == this.predict)
@@ -358,8 +366,17 @@ a {
   display: flex;
   flex-wrap: wrap;
 }
-
 .cs-tag span {
   margin: 2px 0;
+}
+.blinking{
+    animation:blinkingText 0.8s infinite;
+}
+@keyframes blinkingText{
+    0%{     opacity: 1;    }
+    49%{    opacity: 1; }
+    60%{    opacity: 0; }
+    99%{    opacity: 1;  }
+    100%{   opacity: 1;    }
 }
 </style>

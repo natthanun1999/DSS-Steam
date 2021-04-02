@@ -37,7 +37,32 @@ const modelTestCLI = async (userInput) => {
     }
 }
 
+const getMostPick = async (userInput) => {
+    if (userInput.budget == 499) userInput.budget = "A"
+	else if (userInput.budget == 1000) userInput.budget = "B"
+	else userInput.budget = "C"
+
+	if (userInput.age == 17) userInput.age = "A"
+	else userInput.age = "B"
+
+    const params = {
+        budget: userInput.budget,
+        age: userInput.age,
+        category: userInput.category,
+        tag: userInput.tag
+    }
+
+    try {
+        const result = await axios.post(`${BASE_URL}/Most`, { params })
+
+        return result.data
+    } catch (error) {
+        return error.message
+    }
+}
+
 module.exports = {
     getAllGames,
-    modelTestCLI
+    modelTestCLI,
+    getMostPick
 }
