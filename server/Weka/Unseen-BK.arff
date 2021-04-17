@@ -9,4 +9,23 @@
 @attribute gameIndex {359550,550,346110,105600,1085660,887830,877200,934930,882020,413150,881100,4000,887800,289070,570,252490,892970,1313860,1263850,882100,930210,926860,304930,878750,227300,933110,924140,1097150}
 
 @data
-C,B,Single-player,Sports,6,3257,1313860
+A,A,Single-player,Indie,9,151237,413150
+A,A,Single-player,Indie,9,151237,413150
+A,A,Single-player,Indie,9,151237,413150
+B,A,Multi-player,Indie,9,151237,413150
+B,A,Multi-player,Indie,9,151237,413150
+B,A,Multi-player,Indie,9,151237,413150
+B,B,Multi-player,Indie,9,151237,413150
+C,A,Single-player,Action,6,81684,346110
+C,B,Multi-player,Action,8,265850,359550
+C,B,Multi-player,Action,8,265850,359550
+C,B,Multi-player,Action,8,265850,359550
+A,B,Multi-player,Adventure,8,185082,252490
+A,B,Multi-player,Adventure,8,185082,252490
+A,B,Multi-player,Adventure,8,41246,1085660
+A,A,Single-player,Adventure,8,41246,1085660
+C,B,Multi-player,Indie,9,151237,413150
+B,A,Single-player,Strategy,8,30461,289070
+B,A,Multi-player,Strategy,8,30461,289070
+B,A,Multi-player,Strategy,8,30461,289070
+B,A,Co-op,Strategy,8,4834,570

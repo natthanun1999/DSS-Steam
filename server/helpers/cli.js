@@ -87,6 +87,7 @@ let prediction = async (cb) => {
     const pathExec = execSync("echo %cd%").toString()
     const path = pathExec.slice(0, pathExec.length - 2);
 
+    //const cmd = `java -classpath F:\\Weka\\weka.jar weka.classifiers.trees.J48 -l \"${path}\\Weka\\tree.model\" -T \"${path}\\Weka\\Unseen.arff\" -p 7`;
     const cmd = `java -classpath F:\\Weka\\weka.jar weka.classifiers.bayes.NaiveBayes -l \"${path}\\Weka\\naive.model\" -T \"${path}\\Weka\\Unseen.arff\" -p 7`;
 
     const execute = execSync(cmd).toString();
